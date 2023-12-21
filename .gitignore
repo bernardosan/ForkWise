@@ -1,6 +1,4 @@
 node_modules
-.parcel-cache
-dist
 firebase-debug.1.log
 firebase-debug.log
 firebase.js
