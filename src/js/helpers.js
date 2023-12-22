@@ -1,7 +1,9 @@
+import { TIMEOUT_SECONDS } from "./config";
+
 export const getJSON = async function(url){
 
     try{
-        const response = await Promise.race[fetch(url), timeout(10)]
+        const response = await Promise.race([fetch(url), timeout(TIMEOUT_SECONDS)]);
         const data = await response.json();
         console.log(data.data.recipe);
       
