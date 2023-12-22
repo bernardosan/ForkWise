@@ -4,6 +4,7 @@ import recipeView from './views/recipeView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'
 
+
 const controlRecipe = async function () {
   try {
 
@@ -25,9 +26,12 @@ const controlRecipe = async function () {
   }
 };
 
-controlRecipe();
+// handler-subscriber pattern with view to handle hashchanges and load events
+const init = function(){
+  recipeView.addHandlerRender(controlRecipe)
+}
 
-['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe))
+init();
 
 // https://forkify-api.herokuapp.com/v2
 
