@@ -1,6 +1,9 @@
 import icons from 'url:../../img/icons.svg';
 import { Fraction } from 'fractional';
 
+const ERROR_MESSAGE = 'No recipes found for your query. Please try again!'
+const DEFAULT_MESSAGE = `Start by searching for a recipe or an ingredient. Have fun!`
+
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
@@ -20,12 +23,42 @@ class RecipeView {
               <use href="${icons}#icon-loader"></use>
           </svg>
         </div> `;
-    this.#parentElement.innerHTML = '';
+    this.#clear();
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   };
 
-  addHandlerRender(handler){
-    ['hashchange', 'load'].forEach(event => window.addEventListener(event, handler));
+  renderError(message = ERROR_MESSAGE) {
+    const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="src/img/icons.svg#icon-alert-triangle"></use>
+          </svg>
+       </div>
+       <p>${message}</p>
+     </div> `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderMessage(message = DEFAULT_MESSAGE) {
+    const markup = `
+    <div class="message">
+      <div>
+       <svg>
+         <use href="src/img/icons.svg#icon-smile"></use>
+        </svg>
+      </div>
+      <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+    </div>`;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(event =>
+      window.addEventListener(event, handler)
+    );
   }
 
   #clear() {
@@ -91,7 +124,9 @@ class RecipeView {
         <div class="recipe__ingredients">
           <h2 class="heading--2">Recipe ingredients</h2>
           <ul class="recipe__ingredient-list">
-            ${this.#data.ingredients.map(ing => this.#generateMarkupIngredients(ing)).join('')}
+            ${this.#data.ingredients
+              .map(ing => this.#generateMarkupIngredients(ing))
+              .join('')}
           </ul>
         </div>
     
@@ -121,7 +156,9 @@ class RecipeView {
        <svg class="recipe__icon">
        <use href="${icons}#icon-check"></use>
        </svg>
-       <div class="recipe__quantity">${ing.quantity ? new Fraction(ing.quantity).toString() : ''}</div>
+       <div class="recipe__quantity">${
+         ing.quantity ? new Fraction(ing.quantity).toString() : ''
+       }</div>
        <div class="recipe__description">
           <span class="recipe__unit">${ing.unit}</span>${ing.description}
        </div>

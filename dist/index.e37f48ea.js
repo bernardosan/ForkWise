@@ -595,6 +595,7 @@ const controlRecipe = async function() {
         (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
     } catch (err) {
         console.error(err);
+        (0, _recipeViewJsDefault.default).renderError();
     }
 };
 // handler-subscriber pattern with view to handle hashchanges and load events
@@ -1874,7 +1875,7 @@ const loadRecipe = async function(id) {
         };
         console.log(recipe);
     } catch (error) {
-        alert(error);
+        throw error;
     }
 };
 
@@ -1951,6 +1952,8 @@ parcelHelpers.defineInteropFlag(exports);
 var _iconsSvg = require("url:../../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 var _fractional = require("fractional");
+const ERROR_MESSAGE = "No recipes found for your query. Please try again!";
+const DEFAULT_MESSAGE = `Start by searching for a recipe or an ingredient. Have fun!`;
 class RecipeView {
     #parentElement = document.querySelector(".recipe");
     #data;
@@ -1967,9 +1970,35 @@ class RecipeView {
               <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
           </svg>
         </div> `;
-        this.#parentElement.innerHTML = "";
+        this.#clear();
         this.#parentElement.insertAdjacentHTML("afterbegin", markup);
     };
+    renderError(message = ERROR_MESSAGE) {
+        const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="src/img/icons.svg#icon-alert-triangle"></use>
+          </svg>
+       </div>
+       <p>${message}</p>
+     </div> `;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = DEFAULT_MESSAGE) {
+        const markup = `
+    <div class="message">
+      <div>
+       <svg>
+         <use href="src/img/icons.svg#icon-smile"></use>
+        </svg>
+      </div>
+      <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+    </div>`;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
     addHandlerRender(handler) {
         [
             "hashchange",
